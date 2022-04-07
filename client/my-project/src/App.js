@@ -3,6 +3,7 @@ import "./App.css";
 import TaskInput from "./components/TaskInput";
 import PrivateRoute from "./components/PrivateRoute";
 import Register from "./components/Register";
+
 import axios from "axios";
 import {
   BrowserRouter as Router,
@@ -11,6 +12,7 @@ import {
   useNavigate,
 } from "react-router-dom";
 import Login from "./components/Login";
+import Modal from "./components/Modal";
 
 function App() {
   const [todos, setTodo] = useState([]);
@@ -18,8 +20,20 @@ function App() {
   const [logged, setLogged] = useState(false);
   const [user, setUser] = useState("");
 
+  const [modalIsOpen, setModal] = useState("hidden");
+  const [todoId, setTodoID] = useState("");
+
   const refresh = () => {
     setTodo([]);
+  };
+
+  const openModal = (id) => {
+    setModal("flex");
+    setTodoID(id);
+  };
+
+  const closeModal = () => {
+    setModal("hidden");
   };
 
   const getUser = (username) => {
@@ -45,6 +59,19 @@ function App() {
       .then((response) => {
         setTodo([]);
       });
+  }
+
+  function updateData(updatedText) {
+    axios
+      .post(`/todo/update`, {
+        user_id: user.data,
+        todo_id: todoId,
+        title: updatedText,
+      })
+      .then((response) => {
+        setTodo([]);
+      })
+      .then((response) => closeModal());
   }
 
   useEffect(() => {
@@ -73,6 +100,12 @@ function App() {
                   refresh={refresh}
                   todos={todos}
                   deleteData={deleteData}
+                  openModal={openModal}
+                />
+                <Modal
+                  view={modalIsOpen}
+                  close={closeModal}
+                  updateData={updateData}
                 />
               </PrivateRoute>
             }

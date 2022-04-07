@@ -25,8 +25,8 @@ const postTodo = async (req, res) => {
 
 const updateTodo = async (req, res) => {
   try {
-    const User = await UserModel.find({ _id: req.body.userid });
-    const todo = await User[0].todos.id(req.body.id);
+    const User = await UserModel.find({ _id: req.body.user_id });
+    const todo = await User[0].todos.id(req.body.todo_id);
 
     todo.title = req.body.title;
 

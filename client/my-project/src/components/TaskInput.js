@@ -39,7 +39,14 @@ function TaskInput(props) {
         </div>
       </div>
       {props.todos.map((todo, i) => {
-        return <Todo content={todo} deleteData={props.deleteData} key={i} />;
+        return (
+          <Todo
+            content={todo}
+            deleteData={props.deleteData}
+            openModal={props.openModal}
+            key={i}
+          />
+        );
       })}
     </>
   );
